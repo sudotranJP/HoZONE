@@ -15,8 +15,8 @@ function renderFoodList() {
   const listEl = document.getElementById("food-list");
   listEl.innerHTML = "";
 
-  // S-01は「冷蔵・常温」のみ対象（冷凍庫食材はS-02で別管理）
-  const targetFoods = foods.filter(food => food.location !== "冷凍");
+  // S-01は「冷蔵・常温」かつ「未消費」のみ対象（冷凍庫食材はS-02、消費済みは専用画面で管理）
+  const targetFoods = foods.filter(food => food.location !== "冷凍" && !food.consumed);
 
   // 消費(賞味)期限が近い順にソート
   targetFoods.sort((a, b) => new Date(a.expiryDate) - new Date(b.expiryDate));
@@ -27,6 +27,16 @@ function renderFoodList() {
     const isWarning = !isExpired && daysLeft <= 3;
 
     const li = document.createElement("li");
+    li.className = "food-row";
+
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.className = "consume-checkbox";
+    checkbox.title = "消費済みにする";
+    checkbox.addEventListener("change", () => {
+      setFoodConsumed(food.id, true);
+      renderFoodList();
+    });
 
     const card = document.createElement("a");
     card.href = `register.html?id=${encodeURIComponent(food.id)}`;
@@ -47,6 +57,7 @@ function renderFoodList() {
 
     card.appendChild(info);
     card.appendChild(countdown);
+    li.appendChild(checkbox);
     li.appendChild(card);
     listEl.appendChild(li);
   });

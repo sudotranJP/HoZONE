@@ -40,8 +40,8 @@ function renderFreezerList() {
   const listEl = document.getElementById("freezer-list");
   listEl.innerHTML = "";
 
-  // S-02は「冷凍」のみ対象
-  const targetFoods = foods.filter(food => food.location === "冷凍");
+  // S-02は「冷凍」かつ「未消費」のみ対象
+  const targetFoods = foods.filter(food => food.location === "冷凍" && !food.consumed);
 
   // 消費(賞味)期限が近い順にソート
   targetFoods.sort((a, b) => new Date(a.expiryDate) - new Date(b.expiryDate));
@@ -50,6 +50,16 @@ function renderFreezerList() {
     const status = getFreezerStatus(food, today);
 
     const li = document.createElement("li");
+    li.className = "food-row";
+
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.className = "consume-checkbox";
+    checkbox.title = "消費済みにする";
+    checkbox.addEventListener("change", () => {
+      setFoodConsumed(food.id, true);
+      renderFreezerList();
+    });
 
     const card = document.createElement("a");
     card.href = `register.html?id=${encodeURIComponent(food.id)}`;
@@ -68,6 +78,7 @@ function renderFreezerList() {
 
     card.appendChild(info);
     card.appendChild(countdown);
+    li.appendChild(checkbox);
     li.appendChild(card);
     listEl.appendChild(li);
   });

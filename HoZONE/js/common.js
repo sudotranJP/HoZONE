@@ -83,3 +83,19 @@ function generateFoodId(foods) {
   const maxId = foods.reduce((max, f) => Math.max(max, parseInt(f.id, 10) || 0), 0);
   return String(maxId + 1);
 }
+
+// 食材を消費済み／未消費に切り替える（元に戻すボタン用にconsumed:falseも受け付ける）
+function setFoodConsumed(id, consumed) {
+  const foods = loadFoods();
+  const index = foods.findIndex(f => f.id === id);
+  if (index === -1) return;
+  foods[index].consumed = consumed;
+  foods[index].consumedDate = consumed ? toISODate(getToday()) : "";
+  saveFoods(foods);
+}
+
+// 食材を完全に削除する（消費済み画面からの手動削除用）
+function deleteFood(id) {
+  const foods = loadFoods();
+  saveFoods(foods.filter(f => f.id !== id));
+}
