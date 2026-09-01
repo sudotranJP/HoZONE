@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HoZONE - 食材登録</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header>
+    <h1>食材登録</h1>
+    <p>（S-03・デザイン未着手／機能確認用）</p>
+  </header>
+
+  <main>
+    <form id="food-form">
+      <div>
+        <label for="food-name">食材名</label>
+        <input type="text" id="food-name" required>
+      </div>
+      <div>
+        <label for="expiry-date">消費(賞味)期限</label>
+        <input type="date" id="expiry-date" required>
+      </div>
+      <div>
+        <label for="purchase-date">購入日</label>
+        <input type="date" id="purchase-date" required>
+      </div>
+      <div>
+        <label for="location">保存場所</label>
+        <select id="location" required>
+          <option value="常温">常温</option>
+          <option value="冷蔵">冷蔵</option>
+          <option value="冷凍">冷凍</option>
+        </select>
+      </div>
+      <button type="submit">登録する</button>
+    </form>
+    <a href="index.html">← ホームに戻る</a>
+  </main>
+
+  <script src="js/common.js"></script>
+  <script src="js/register.js"></script>
+</body>
+</html>

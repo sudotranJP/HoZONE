@@ -1,0 +1,34 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: sans-serif;
+  max-width: 480px; /* 仮置き：PC作業中の確認用。本格的なレスポンシブ対応は画面設計時に見直す */
+  margin-inline: auto;
+  padding: 16px;
+  background: #f7f7f7;
+}
+
+header {
+  margin-bottom: 16px;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+header p {
+  margin: 4px 0 0;
+  font-size: 0.85rem;
+  color: #666;
+}
+
+#status {
+  padding: 12px;
+  background: #fff;
+  border-radius: 8px;
+  text-align: center;
+}
