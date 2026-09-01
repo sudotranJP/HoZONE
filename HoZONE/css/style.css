@@ -45,3 +45,42 @@ header p {
 #food-list li a {
   flex-shrink: 0;
 }
+
+#freezer-list {
+  list-style: none;
+  padding: 0;
+}
+
+#freezer-list li {
+  background: #fff;
+  padding: 10px 12px;
+  margin-bottom: 6px;
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+#freezer-list li a {
+  flex-shrink: 0;
+}
+
+footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid #ddd;
+}
+
+footer a {
+  flex: 1;
+  text-align: center;
+  padding: 8px;
+  background: #fff;
+  border-radius: 8px;
+  text-decoration: none;
+  color: #333;
+}

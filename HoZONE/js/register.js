@@ -1,8 +1,18 @@
-// S-03 食材登録・編集画面 専用の処理（F-01対応）
+// S-03 食材登録・編集画面 専用の処理（F-01, F-03対応）
 
 const foodForm = document.getElementById("food-form");
 const headingEl = document.getElementById("register-heading");
 const submitBtn = document.getElementById("submit-btn");
+const locationSelect = document.getElementById("location");
+const frozenFoodField = document.getElementById("frozen-food-field");
+const isFrozenFoodCheckbox = document.getElementById("is-frozen-food");
+
+// 保存場所が「冷凍」の時だけ「これは冷凍食品です」チェックを表示する
+function updateFrozenFoodFieldVisibility() {
+  frozenFoodField.hidden = (locationSelect.value !== "冷凍");
+}
+locationSelect.addEventListener("change", updateFrozenFoodFieldVisibility);
+updateFrozenFoodFieldVisibility();
 
 // URLの ?id=xxx を見て、編集対象があるか判定する
 const params = new URLSearchParams(window.location.search);
@@ -22,7 +32,9 @@ if (editingFood) {
   document.getElementById("food-name").value = editingFood.name;
   document.getElementById("expiry-date").value = editingFood.expiryDate;
   document.getElementById("purchase-date").value = editingFood.purchaseDate;
-  document.getElementById("location").value = editingFood.location;
+  locationSelect.value = editingFood.location;
+  isFrozenFoodCheckbox.checked = !!editingFood.isFrozenFood;
+  updateFrozenFoodFieldVisibility();
 }
 
 foodForm.addEventListener("submit", (event) => {
@@ -34,7 +46,9 @@ foodForm.addEventListener("submit", (event) => {
     name: document.getElementById("food-name").value,
     expiryDate: document.getElementById("expiry-date").value,
     purchaseDate: document.getElementById("purchase-date").value,
-    location: document.getElementById("location").value,
+    location: locationSelect.value,
+    // 保存場所が冷凍の時だけ意味を持つ（冷凍食品そのものか、生鮮食品の冷凍保存か）
+    isFrozenFood: (locationSelect.value === "冷凍") ? isFrozenFoodCheckbox.checked : false,
   };
 
   if (editingFood) {

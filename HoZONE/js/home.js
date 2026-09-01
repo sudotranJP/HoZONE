@@ -1,28 +1,6 @@
 // S-01 ホーム画面（一覧表示）専用の処理
 
-// 日付を「年/月/日」の表示用に整形
-function formatDateJP(date) {
-  const y = date.getFullYear();
-  const m = date.getMonth() + 1;
-  const d = date.getDate();
-  return `${y}/${m}/${d}`;
-}
-
-// 今日の日付（時刻は0時に揃える。日数計算のズレを防ぐため）
-function getToday() {
-  const now = new Date();
-  return new Date(now.getFullYear(), now.getMonth(), now.getDate());
-}
-
-// 消費(賞味)期限までの残り日数を計算（マイナスなら期限切れ）
-function daysUntilExpiry(expiryDateStr, today) {
-  const expiry = new Date(expiryDateStr);
-  const expiryOnly = new Date(expiry.getFullYear(), expiry.getMonth(), expiry.getDate());
-  const diffMs = expiryOnly - today;
-  return Math.round(diffMs / (1000 * 60 * 60 * 24));
-}
-
-// 残り日数を表示用テキストに変換
+// 消費(賞味)期限までの残り日数を表示用テキストに変換
 function formatCountdown(daysLeft) {
   if (daysLeft < 0) {
     return `期限切れ ${Math.abs(daysLeft)}日`;
@@ -54,7 +32,7 @@ function renderFoodList() {
   targetFoods.forEach(food => {
     const li = document.createElement("li");
 
-    const daysLeft = daysUntilExpiry(food.expiryDate, today);
+    const daysLeft = daysBetween(today, food.expiryDate);
 
     const textSpan = document.createElement("span");
     textSpan.textContent = `[${food.location}] ${food.name} 期限: ${food.expiryDate}（${formatCountdown(daysLeft)}）`;
