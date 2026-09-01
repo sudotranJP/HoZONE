@@ -3,18 +3,26 @@
 // 表示の考え方：
 // ・冷凍食品そのもの（isFrozenFood: true） → 消費(賞味)期限までの「残り◯日」
 // ・生鮮食品を冷凍保存したもの（isFrozenFood: false）
-//     → 冷凍庫に入れてからの経過日数「冷凍庫移動◯日」（冷凍焼け・入れっぱなし防止のため）
-//     ※現状「購入日」を冷凍庫に入れた日とみなして計算しています
-//       （専用の「冷凍開始日」項目が必要になった場合は後日追加できます）
+//     → 冷凍開始日からの経過日数「冷凍庫移動◯日」（冷凍焼け・入れっぱなし防止のため）
+//     ※冷凍開始日が未入力の古いデータは、購入日を代わりに使用します
 
-function formatFreezerStatus(food, today) {
+function getFreezerStatus(food, today) {
   if (food.isFrozenFood) {
     const daysLeft = daysBetween(today, food.expiryDate);
-    return daysLeft < 0 ? `期限切れ ${Math.abs(daysLeft)}日` : `残り ${daysLeft}日`;
+    return {
+      label: daysLeft < 0 ? "期限切れ" : "残り",
+      value: Math.abs(daysLeft),
+      isAlert: daysLeft < 0,
+    };
   }
-  // 冷凍庫に入れてからの経過日数（購入日を基準日とする）
-  const elapsed = daysBetween(new Date(food.purchaseDate), toISODate(today));
-  return `冷凍庫移動 ${elapsed}日`;
+  // 冷凍庫に入れてからの経過日数（冷凍開始日を基準日、未入力なら購入日で代用）
+  const baseDateStr = food.frozenDate || food.purchaseDate;
+  const elapsed = daysBetween(new Date(baseDateStr), toISODate(today));
+  return {
+    label: "冷凍庫移動",
+    value: elapsed,
+    isAlert: elapsed >= 30, // 冷凍焼けの目安として30日以上は強調表示
+  };
 }
 
 function renderTodayDate(today) {
@@ -39,20 +47,31 @@ function renderFreezerList() {
   targetFoods.sort((a, b) => new Date(a.expiryDate) - new Date(b.expiryDate));
 
   targetFoods.forEach(food => {
+    const status = getFreezerStatus(food, today);
+
     const li = document.createElement("li");
 
-    const textSpan = document.createElement("span");
-    textSpan.textContent = `${food.name} 期限: ${food.expiryDate}（${formatFreezerStatus(food, today)}）`;
+    const card = document.createElement("a");
+    card.href = `register.html?id=${encodeURIComponent(food.id)}`;
+    card.className = "food-card" + (status.isAlert ? " expired" : "");
 
-    const editLink = document.createElement("a");
-    editLink.href = `register.html?id=${encodeURIComponent(food.id)}`;
-    editLink.textContent = "編集";
+    const info = document.createElement("div");
+    info.className = "food-info";
+    info.innerHTML = `
+      <div class="food-name">${food.name}</div>
+      <div class="food-meta">期限：${food.expiryDate}</div>
+    `;
 
-    li.appendChild(textSpan);
-    li.appendChild(editLink);
+    const countdown = document.createElement("div");
+    countdown.className = "food-countdown" + (status.isAlert ? "" : " ok");
+    countdown.innerHTML = `<div class="label">${status.label}</div><div class="days">${status.value}</div><div class="unit">日</div>`;
+
+    card.appendChild(info);
+    card.appendChild(countdown);
+    li.appendChild(card);
     listEl.appendChild(li);
   });
 }
 
 renderFreezerList();
-console.log("HoZONE: S-02 冷凍庫一覧（経過日数カウント）動作確認OK");
+console.log("HoZONE: S-02 冷凍庫一覧（カード表示・タップ編集）動作確認OK");

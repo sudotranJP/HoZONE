@@ -4,68 +4,124 @@
 
 body {
   margin: 0;
-  font-family: sans-serif;
-  max-width: 480px; /* 仮置き：PC作業中の確認用。本格的なレスポンシブ対応は画面設計時に見直す */
+  font-family: "Hiragino Sans", "Yu Gothic", sans-serif;
+  max-width: 480px; /* 仮置き：PC作業中の確認用。本格的なレスポンシブ対応は後日見直す */
   margin-inline: auto;
   padding: 16px;
-  background: #f7f7f7;
+  background: #f2f2f2;
+  color: #222;
 }
 
+/* ヘッダー */
 header {
-  margin-bottom: 16px;
+  margin-bottom: 12px;
 }
 
-header h1 {
+.header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header-top h1 {
   margin: 0;
   font-size: 1.5rem;
 }
 
-header p {
+.gear {
+  font-size: 1.3rem;
+}
+
+#today-date {
   margin: 4px 0 0;
   font-size: 0.85rem;
   color: #666;
 }
 
-#food-list {
-  list-style: none;
-  padding: 0;
+.sort-label {
+  text-align: right;
+  font-size: 0.75rem;
+  color: #777;
+  margin-top: 6px;
 }
 
-#food-list li {
-  background: #fff;
-  padding: 10px 12px;
-  margin-bottom: 6px;
-  border-radius: 8px;
+h2.section-title {
+  font-size: 1rem;
+  color: #555;
+  margin: 4px 0 10px;
+}
+
+/* 食材カード（S-01・S-02共通） */
+#food-list, #freezer-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.food-card {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 8px;
-}
-
-#food-list li a {
-  flex-shrink: 0;
-}
-
-#freezer-list {
-  list-style: none;
-  padding: 0;
-}
-
-#freezer-list li {
   background: #fff;
-  padding: 10px 12px;
-  margin-bottom: 6px;
-  border-radius: 8px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 8px;
+  border-radius: 10px;
+  padding: 12px 14px;
+  margin-bottom: 8px;
+  text-decoration: none;
+  color: inherit;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
 }
 
-#freezer-list li a {
+.food-card.expired {
+  background: #ffe3e3;
+}
+
+.food-card.warning {
+  background: #e6f4ff;
+}
+
+.food-info .food-name {
+  font-weight: bold;
+  font-size: 1.05rem;
+}
+
+.food-info .food-meta {
+  font-size: 0.85rem;
+  color: #555;
+  margin-top: 2px;
+}
+
+.food-countdown {
+  text-align: center;
   flex-shrink: 0;
+  padding-left: 10px;
 }
 
+.food-countdown .label {
+  font-size: 0.7rem;
+  color: #d33;
+}
+
+.food-countdown.ok .label {
+  color: #666;
+}
+
+.food-countdown .days {
+  font-size: 1.4rem;
+  font-weight: bold;
+  line-height: 1.1;
+  color: #d33;
+}
+
+.food-countdown.ok .days {
+  color: #333;
+}
+
+.food-countdown .unit {
+  font-size: 0.7rem;
+  color: #666;
+}
+
+/* フッターナビ */
 footer {
   display: flex;
   justify-content: space-between;
@@ -78,9 +134,94 @@ footer {
 footer a {
   flex: 1;
   text-align: center;
-  padding: 8px;
+  padding: 10px 4px;
   background: #fff;
   border-radius: 8px;
   text-decoration: none;
   color: #333;
+  font-size: 0.85rem;
+}
+
+footer a.active {
+  background: #3b9ee8;
+  color: #fff;
+}
+
+/* 登録・編集フォーム（S-03） */
+form label {
+  display: block;
+  font-size: 0.85rem;
+  color: #555;
+  margin: 14px 0 4px;
+}
+
+form input[type="text"],
+form input[type="date"],
+form input[type="number"] {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+.location-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.location-btn {
+  flex: 1;
+  padding: 14px 0;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background: #f7f7f7;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+.location-btn.active {
+  background: #3b9ee8;
+  color: #fff;
+  border-color: #3b9ee8;
+}
+
+.frozen-food-check {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 14px;
+  font-size: 0.9rem;
+}
+
+.frozen-food-check input {
+  width: 18px;
+  height: 18px;
+}
+
+.required-note {
+  font-size: 0.75rem;
+  color: #d33;
+  text-align: center;
+  margin-top: 16px;
+}
+
+#submit-btn {
+  width: 100%;
+  padding: 14px;
+  margin-top: 12px;
+  background: #3b9ee8;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.05rem;
+  font-weight: bold;
+}
+
+.back-link {
+  display: block;
+  text-align: center;
+  margin-top: 14px;
+  color: #666;
+  font-size: 0.85rem;
 }

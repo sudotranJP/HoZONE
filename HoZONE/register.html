@@ -8,41 +8,45 @@
 </head>
 <body>
   <header>
-    <h1 id="register-heading">食材登録</h1>
-    <p>（S-03・デザイン未着手／機能確認用）</p>
+    <div class="header-top">
+      <h1 id="register-heading">食材登録</h1>
+      <span class="gear">⚙️</span>
+    </div>
   </header>
 
   <main>
     <form id="food-form">
-      <div>
-        <label for="food-name">食材名</label>
-        <input type="text" id="food-name" required>
+      <label for="food-name">名前※</label>
+      <input type="text" id="food-name" required>
+
+      <label for="expiry-date">消費(賞味)期限※</label>
+      <input type="date" id="expiry-date" required>
+
+      <label for="purchase-date">購入日※</label>
+      <input type="date" id="purchase-date" required>
+
+      <label>保存場所※</label>
+      <div class="location-buttons" id="location-buttons">
+        <button type="button" class="location-btn" data-value="常温">常温</button>
+        <button type="button" class="location-btn" data-value="冷蔵">冷蔵庫</button>
+        <button type="button" class="location-btn" data-value="冷凍">冷凍</button>
       </div>
-      <div>
-        <label for="expiry-date">消費(賞味)期限</label>
-        <input type="date" id="expiry-date" required>
+
+      <div id="frozen-food-field" class="frozen-food-check" hidden>
+        <input type="checkbox" id="is-frozen-food">
+        <label for="is-frozen-food" style="margin:0;">これは冷凍食品です（冷凍焼け通知の対象外にします）</label>
       </div>
-      <div>
-        <label for="purchase-date">購入日</label>
-        <input type="date" id="purchase-date" required>
+
+      <div id="frozen-date-field" hidden>
+        <label for="frozen-date">冷凍開始日（冷凍庫に入れた日）</label>
+        <input type="date" id="frozen-date">
       </div>
-      <div>
-        <label for="location">保存場所</label>
-        <select id="location" required>
-          <option value="常温">常温</option>
-          <option value="冷蔵">冷蔵</option>
-          <option value="冷凍">冷凍</option>
-        </select>
-      </div>
-      <div id="frozen-food-field" hidden>
-        <label>
-          <input type="checkbox" id="is-frozen-food">
-          これは冷凍食品です
-        </label>
-      </div>
+
+      <p class="required-note">※は必須項目です。</p>
+
       <button type="submit" id="submit-btn">登録する</button>
     </form>
-    <a href="index.html">← ホームに戻る</a>
+    <a href="index.html" class="back-link">← ホームに戻る</a>
   </main>
 
   <script src="js/common.js"></script>

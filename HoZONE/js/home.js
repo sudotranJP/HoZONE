@@ -1,13 +1,5 @@
 // S-01 ホーム画面（一覧表示）専用の処理
 
-// 消費(賞味)期限までの残り日数を表示用テキストに変換
-function formatCountdown(daysLeft) {
-  if (daysLeft < 0) {
-    return `期限切れ ${Math.abs(daysLeft)}日`;
-  }
-  return `残り ${daysLeft}日`;
-}
-
 function renderTodayDate(today) {
   const dateEl = document.getElementById("today-date");
   if (dateEl) {
@@ -30,22 +22,35 @@ function renderFoodList() {
   targetFoods.sort((a, b) => new Date(a.expiryDate) - new Date(b.expiryDate));
 
   targetFoods.forEach(food => {
+    const daysLeft = daysBetween(today, food.expiryDate);
+    const isExpired = daysLeft < 0;
+    const isWarning = !isExpired && daysLeft <= 3;
+
     const li = document.createElement("li");
 
-    const daysLeft = daysBetween(today, food.expiryDate);
+    const card = document.createElement("a");
+    card.href = `register.html?id=${encodeURIComponent(food.id)}`;
+    card.className = "food-card" + (isExpired ? " expired" : isWarning ? " warning" : "");
 
-    const textSpan = document.createElement("span");
-    textSpan.textContent = `[${food.location}] ${food.name} 期限: ${food.expiryDate}（${formatCountdown(daysLeft)}）`;
+    const info = document.createElement("div");
+    info.className = "food-info";
+    info.innerHTML = `
+      <div class="food-name">[${food.location}] ${food.name}</div>
+      <div class="food-meta">期限：${food.expiryDate}</div>
+    `;
 
-    const editLink = document.createElement("a");
-    editLink.href = `register.html?id=${encodeURIComponent(food.id)}`;
-    editLink.textContent = "編集";
+    const countdown = document.createElement("div");
+    countdown.className = "food-countdown" + (isExpired ? "" : " ok");
+    countdown.innerHTML = isExpired
+      ? `<div class="label">期限切れ</div><div class="days">${Math.abs(daysLeft)}</div><div class="unit">日</div>`
+      : `<div class="label">残り</div><div class="days">${daysLeft}</div><div class="unit">日</div>`;
 
-    li.appendChild(textSpan);
-    li.appendChild(editLink);
+    card.appendChild(info);
+    card.appendChild(countdown);
+    li.appendChild(card);
     listEl.appendChild(li);
   });
 }
 
 renderFoodList();
-console.log("HoZONE: S-01 一覧表示（期限カウントダウン・今日の日付表示つき）動作確認OK");
+console.log("HoZONE: S-01 一覧表示（カード表示・タップ編集）動作確認OK");
