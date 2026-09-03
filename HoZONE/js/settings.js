@@ -63,3 +63,34 @@ importFileInput.addEventListener("change", (event) => {
   };
   reader.readAsText(file);
 });
+
+// 通知（F-04）：ブラウザ通知の許可状態を表示・リクエストする
+const notifyBtn = document.getElementById("notify-permission-btn");
+
+function updateNotifyButton() {
+  if (!("Notification" in window)) {
+    notifyBtn.textContent = "このブラウザは非対応";
+    notifyBtn.disabled = true;
+    return;
+  }
+  if (Notification.permission === "granted") {
+    notifyBtn.textContent = "許可済み ✓";
+    notifyBtn.disabled = true;
+  } else if (Notification.permission === "denied") {
+    notifyBtn.textContent = "ブロック中（ブラウザ設定から変更してください）";
+    notifyBtn.disabled = true;
+  } else {
+    notifyBtn.textContent = "通知を許可する";
+    notifyBtn.disabled = false;
+  }
+}
+
+notifyBtn.addEventListener("click", () => {
+  Notification.requestPermission().then(() => {
+    updateNotifyButton();
+    // 許可された場合、その場で一度チェックする
+    maybeShowExpiryNotification();
+  });
+});
+
+updateNotifyButton();

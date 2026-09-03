@@ -99,3 +99,45 @@ function deleteFood(id) {
   const foods = loadFoods();
   saveFoods(foods.filter(f => f.id !== id));
 }
+
+// ===== 期限通知（F-04）=====
+// ブラウザのNotification APIを使用。閉じている間は通知できないため、
+// 「アプリ（サイト）を開いた時にその場でチェックして通知する」方式で実装している。
+// 対象：消費(賞味)期限の2日前・当日（本来のワイヤーフレームの「17時」は、
+// 開いたタイミングでのチェックのため厳密には再現できない）
+const NOTIFY_LAST_KEY = "hozone_last_notified_date";
+
+// 通知対象（2日前 or 当日）の食材一覧を返す
+function getExpiringFoods(foods, today) {
+  return foods.filter(food => {
+    if (food.consumed || !food.expiryDate) return false;
+    const daysLeft = daysBetween(today, food.expiryDate);
+    return daysLeft === 2 || daysLeft === 0;
+  });
+}
+
+// 通知条件を満たす食材があれば、ブラウザ通知を表示する（1日1回まで）
+function maybeShowExpiryNotification() {
+  if (!("Notification" in window)) return;
+  if (Notification.permission !== "granted") return;
+
+  const today = getToday();
+  const todayISO = toISODate(today);
+
+  // 同じ日にすでに通知済みなら出さない（開くたびに何度も出るのを防ぐ）
+  if (localStorage.getItem(NOTIFY_LAST_KEY) === todayISO) return;
+
+  const foods = loadFoods();
+  const targets = getExpiringFoods(foods, today);
+  if (targets.length === 0) return;
+
+  const names = targets.map(f => f.name).join("、");
+  new Notification("HoZONE：期限が近い食材があります", {
+    body: `${names} の消費(賞味)期限が近づいています。`,
+  });
+
+  localStorage.setItem(NOTIFY_LAST_KEY, todayISO);
+}
+
+// 全画面共通：読み込み時に通知チェックを行う
+maybeShowExpiryNotification();
