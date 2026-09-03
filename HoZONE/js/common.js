@@ -100,6 +100,15 @@ function deleteFood(id) {
   saveFoods(foods.filter(f => f.id !== id));
 }
 
+// 「（数量：4、大きさ：中）」のような表示テキストを組み立てる
+// サイズ未設定の場合は数量のみ表示する
+function formatQuantitySize(food) {
+  const quantity = food.quantity || 1;
+  return food.size
+    ? `（数量：${quantity}　大きさ：${food.size}）`
+    : `（数量：${quantity}）`;
+}
+
 // ===== 期限通知（F-04）=====
 // ブラウザのNotification APIを使用。閉じている間は通知できないため、
 // 「アプリ（サイト）を開いた時にその場でチェックして通知する」方式で実装している。

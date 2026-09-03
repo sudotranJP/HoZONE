@@ -68,7 +68,7 @@ function renderFreezerList() {
     const info = document.createElement("div");
     info.className = "food-info";
     info.innerHTML = `
-      <div class="food-name">${food.name}</div>
+      <div class="food-name">${food.name} ${formatQuantitySize(food)}</div>
       <div class="food-meta">期限：${food.expiryDate}</div>
     `;
 

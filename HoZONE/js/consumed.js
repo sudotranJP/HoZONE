@@ -23,7 +23,7 @@ function renderConsumedList() {
     const info = document.createElement("div");
     info.className = "food-info";
     info.innerHTML = `
-      <div class="food-name">[${food.location}] ${food.name}</div>
+      <div class="food-name">[${food.location}] ${food.name} ${formatQuantitySize(food)}</div>
       <div class="food-meta">消費済みにした日：${food.consumedDate || "不明"}</div>
     `;
 

@@ -55,6 +55,8 @@ if (editingFood) {
   document.getElementById("food-name").value = editingFood.name;
   document.getElementById("expiry-date").value = editingFood.expiryDate;
   document.getElementById("purchase-date").value = editingFood.purchaseDate;
+  document.getElementById("quantity").value = editingFood.quantity || 1;
+  document.getElementById("size").value = editingFood.size || "";
   setSelectedLocation(editingFood.location);
   isFrozenFoodCheckbox.checked = !!editingFood.isFrozenFood;
   // 冷凍開始日が未設定の古いデータは購入日を仮表示（後方互換）
@@ -73,6 +75,8 @@ foodForm.addEventListener("submit", (event) => {
     name: document.getElementById("food-name").value,
     expiryDate: document.getElementById("expiry-date").value,
     purchaseDate: document.getElementById("purchase-date").value,
+    quantity: parseInt(document.getElementById("quantity").value, 10) || 1,
+    size: document.getElementById("size").value,
     location: selectedLocation,
     // 保存場所が冷凍の時だけ意味を持つ（冷凍食品そのものか、生鮮食品の冷凍保存か）
     isFrozenFood: isFrozenFood,
