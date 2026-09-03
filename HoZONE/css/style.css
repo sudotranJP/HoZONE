@@ -304,3 +304,100 @@ form input[type="number"] {
   margin-top: 24px;
   font-size: 0.9rem;
 }
+
+/* 設定画面（S-05） */
+.settings-title {
+  text-align: center;
+  font-size: 1.2rem;
+  background: #fff;
+  padding: 12px;
+  border-radius: 10px;
+  margin: 0 0 12px;
+}
+
+.settings-card {
+  background: #fff;
+  border-radius: 10px;
+  padding: 16px;
+  margin-bottom: 12px;
+}
+
+.settings-card-title {
+  text-align: center;
+  font-size: 1.05rem;
+  margin: 0 0 10px;
+}
+
+.settings-desc {
+  font-size: 0.8rem;
+  color: #555;
+  line-height: 1.5;
+  margin-bottom: 14px;
+}
+
+.btn-export, .btn-import {
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 8px;
+}
+
+.btn-export {
+  background: #cfe8ff;
+  color: #14507d;
+}
+
+.btn-import {
+  background: #ffd7d7;
+  color: #8a1f1f;
+}
+
+.btn-subtext {
+  text-align: center;
+  font-size: 0.75rem;
+  color: #777;
+  margin: 4px 0 0;
+}
+
+.settings-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 0;
+  border-top: 1px solid #eee;
+}
+
+.settings-row:first-of-type {
+  border-top: none;
+}
+
+.settings-row-label {
+  font-size: 0.9rem;
+  font-weight: bold;
+}
+
+.settings-row-note {
+  font-size: 0.72rem;
+  color: #888;
+  margin-top: 2px;
+  max-width: 230px;
+}
+
+.settings-row-value {
+  flex-shrink: 0;
+  padding: 8px 10px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  background: #f0f0f0;
+  color: #999;
+  white-space: nowrap;
+}
+
+.settings-row-value.disabled {
+  cursor: not-allowed;
+}
