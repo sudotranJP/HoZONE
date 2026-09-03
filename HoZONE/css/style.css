@@ -30,6 +30,9 @@ header {
 
 .gear {
   font-size: 1.3rem;
+  padding: 8px;
+  margin: -8px;
+  display: inline-block;
 }
 
 #today-date {
@@ -73,10 +76,33 @@ h2.section-title {
   margin-bottom: 8px;
 }
 
-.consume-checkbox {
-  width: 22px;
-  height: 22px;
+.consume-area {
+  width: 44px;
+  height: 44px;
   flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.consume-checkbox {
+  width: 26px;
+  height: 26px;
+}
+
+.undo-btn {
+  width: 100%;
+  height: 44px;
+  padding: 0 2px;
+  border: 1px solid #d33;
+  border-radius: 8px;
+  background: #fff;
+  color: #d33;
+  font-size: 0.7rem;
+}
+
+.food-row.pending-consume .food-card {
+  opacity: 0.4;
 }
 
 .food-row .food-card {
@@ -183,12 +209,19 @@ form label {
 
 form input[type="text"],
 form input[type="date"],
-form input[type="number"] {
+form input[type="number"],
+form select {
   width: 100%;
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 8px;
   font-size: 1rem;
+}
+
+form select {
+  background: #fff;
+  -webkit-appearance: none;
+  appearance: none;
 }
 
 .location-buttons {
@@ -392,12 +425,24 @@ form input[type="number"] {
   flex-shrink: 0;
   padding: 8px 10px;
   border-radius: 6px;
-  font-size: 0.8rem;
+  border: none;
+  font-size: 0.78rem;
+  background: #cfe8ff;
+  color: #14507d;
+  white-space: normal;
+  max-width: 130px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.settings-row-value:disabled {
   background: #f0f0f0;
   color: #999;
-  white-space: nowrap;
+  cursor: not-allowed;
 }
 
 .settings-row-value.disabled {
+  background: #f0f0f0;
+  color: #999;
   cursor: not-allowed;
 }

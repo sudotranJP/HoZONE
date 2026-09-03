@@ -94,6 +94,26 @@ function setFoodConsumed(id, consumed) {
   saveFoods(foods);
 }
 
+// チェックのタップから実際に反映するまでの猶予時間（誤操作の取り消しを可能にするため）
+const CONSUME_UNDO_DELAY_MS = 3000;
+
+// 個数を1個消費する。0になった時点で消費済み扱いにする
+function consumeOneUnit(id) {
+  const foods = loadFoods();
+  const index = foods.findIndex(f => f.id === id);
+  if (index === -1) return;
+  const currentQty = foods[index].quantity || 1;
+  const newQty = currentQty - 1;
+  if (newQty <= 0) {
+    foods[index].quantity = 0;
+    foods[index].consumed = true;
+    foods[index].consumedDate = toISODate(getToday());
+  } else {
+    foods[index].quantity = newQty;
+  }
+  saveFoods(foods);
+}
+
 // 食材を完全に削除する（消費済み画面からの手動削除用）
 function deleteFood(id) {
   const foods = loadFoods();
@@ -107,6 +127,54 @@ function formatQuantitySize(food) {
   return food.size
     ? `（数量：${quantity}　大きさ：${food.size}）`
     : `（数量：${quantity}）`;
+}
+
+// 消費チェック用のUI部品（チェックボックス＋取り消しボタン）を生成する
+// タップ後すぐには反映せず、CONSUME_UNDO_DELAY_MSの間だけ「取消」を出して猶予を持たせる
+// onCommit: 猶予時間が過ぎて実際に確定した後に呼ばれる（一覧の再描画など）
+function createConsumeCheckboxArea(food, onCommit) {
+  const wrap = document.createElement("div");
+  wrap.className = "consume-area";
+
+  const checkbox = document.createElement("input");
+  checkbox.type = "checkbox";
+  checkbox.className = "consume-checkbox";
+  checkbox.title = "1個消費する（数量が0になると消費済みへ移動）";
+
+  const undoBtn = document.createElement("button");
+  undoBtn.type = "button";
+  undoBtn.className = "undo-btn";
+  undoBtn.textContent = "取消";
+  undoBtn.hidden = true;
+
+  let timerId = null;
+
+  checkbox.addEventListener("change", () => {
+    if (!checkbox.checked) return;
+
+    checkbox.hidden = true;
+    undoBtn.hidden = false;
+    const row = wrap.closest("li");
+    if (row) row.classList.add("pending-consume");
+
+    timerId = setTimeout(() => {
+      consumeOneUnit(food.id);
+      onCommit();
+    }, CONSUME_UNDO_DELAY_MS);
+  });
+
+  undoBtn.addEventListener("click", () => {
+    clearTimeout(timerId);
+    checkbox.checked = false;
+    checkbox.hidden = false;
+    undoBtn.hidden = true;
+    const row = wrap.closest("li");
+    if (row) row.classList.remove("pending-consume");
+  });
+
+  wrap.appendChild(checkbox);
+  wrap.appendChild(undoBtn);
+  return wrap;
 }
 
 // ===== 期限通知（F-04）=====

@@ -52,14 +52,7 @@ function renderFreezerList() {
     const li = document.createElement("li");
     li.className = "food-row";
 
-    const checkbox = document.createElement("input");
-    checkbox.type = "checkbox";
-    checkbox.className = "consume-checkbox";
-    checkbox.title = "消費済みにする";
-    checkbox.addEventListener("change", () => {
-      setFoodConsumed(food.id, true);
-      renderFreezerList();
-    });
+    const consumeArea = createConsumeCheckboxArea(food, renderFreezerList);
 
     const card = document.createElement("a");
     card.href = `register.html?id=${encodeURIComponent(food.id)}`;
@@ -78,7 +71,7 @@ function renderFreezerList() {
 
     card.appendChild(info);
     card.appendChild(countdown);
-    li.appendChild(checkbox);
+    li.appendChild(consumeArea);
     li.appendChild(card);
     listEl.appendChild(li);
   });
