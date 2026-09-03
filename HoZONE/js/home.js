@@ -21,6 +21,11 @@ function renderFoodList() {
   // 消費(賞味)期限が近い順にソート
   targetFoods.sort((a, b) => new Date(a.expiryDate) - new Date(b.expiryDate));
 
+  if (targetFoods.length === 0) {
+    listEl.innerHTML = `<li class="empty-message">登録されている食材はありません。「＋追加」から登録できます。</li>`;
+    return;
+  }
+
   targetFoods.forEach(food => {
     const daysLeft = daysBetween(today, food.expiryDate);
     const isExpired = daysLeft < 0;

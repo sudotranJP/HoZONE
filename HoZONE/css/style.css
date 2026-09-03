@@ -128,7 +128,15 @@ h2.section-title {
 }
 
 .food-card.warning {
-  background: #e6f4ff;
+  background: #fff3cd;
+}
+
+.food-card.frost-mid {
+  background: #eaf6fb;
+}
+
+.food-card.frost-high {
+  background: #bfe6f5;
 }
 
 .food-info .food-name {
@@ -168,6 +176,11 @@ h2.section-title {
   color: #333;
 }
 
+.food-countdown.frost .label,
+.food-countdown.frost .days {
+  color: #0e7c9c;
+}
+
 .food-countdown .unit {
   font-size: 0.7rem;
   color: #666;
@@ -197,6 +210,12 @@ footer a {
 footer a.active {
   background: #3b9ee8;
   color: #fff;
+}
+
+footer a.add-btn {
+  background: #ffcc33;
+  color: #4a3600;
+  font-weight: bold;
 }
 
 /* 登録・編集フォーム（S-03） */
