@@ -55,10 +55,11 @@ function renderFreezerList() {
   listEl.innerHTML = "";
 
   // S-02は「冷凍」かつ「未消費」のみ対象
-  const targetFoods = foods.filter(food => food.location === "冷凍" && !food.consumed);
-
-  // 消費(賞味)期限が近い順にソート
-  targetFoods.sort((a, b) => new Date(a.expiryDate) - new Date(b.expiryDate));
+  // 消費(賞味)期限が近い順 or 購入日が古い順（選択中の並べ替え順に従う）
+  const targetFoods = sortFoodsByOrder(
+    foods.filter(food => food.location === "冷凍" && !food.consumed),
+    getSortOrder()
+  );
 
   updateTotalCount(targetFoods.length);
 
@@ -105,5 +106,6 @@ function renderFreezerList() {
   renderFooterBadges();
 }
 
+setupSortSelect(renderFreezerList);
 renderFreezerList();
-console.log("HoZONE: S-02 冷凍庫一覧（カード表示・タップ編集）動作確認OK");
+console.log("HoZONE: S-02 冷凍庫一覧（カード表示・タップ編集・並べ替え）動作確認OK");

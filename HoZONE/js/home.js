@@ -22,11 +22,11 @@ function renderFoodList() {
   const listEl = document.getElementById("food-list");
   listEl.innerHTML = "";
 
-  // S-01は「冷蔵・常温」かつ「未消費」のみ対象（冷凍庫食材はS-02、消費済みは専用画面で管理）
-  const targetFoods = foods.filter(food => food.location !== "冷凍" && !food.consumed);
-
-  // 消費(賞味)期限が近い順にソート
-  targetFoods.sort((a, b) => new Date(a.expiryDate) - new Date(b.expiryDate));
+  // 消費(賞味)期限が近い順 or 購入日が古い順（選択中の並べ替え順に従う）
+  const targetFoods = sortFoodsByOrder(
+    foods.filter(food => food.location !== "冷凍" && !food.consumed),
+    getSortOrder()
+  );
 
   updateTotalCount(targetFoods.length);
 
@@ -73,5 +73,6 @@ function renderFoodList() {
   renderFooterBadges();
 }
 
+setupSortSelect(renderFoodList);
 renderFoodList();
-console.log("HoZONE: S-01 一覧表示（カード表示・タップ編集）動作確認OK");
+console.log("HoZONE: S-01 一覧表示（カード表示・タップ編集・並べ替え）動作確認OK");

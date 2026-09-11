@@ -112,6 +112,42 @@ function formatQuantitySize(food) {
     : `（数量：${quantity}）`;
 }
 
+// ===== 並べ替え設定（S-01・S-02共通） =====
+const SORT_ORDER_KEY = "hozone_sort_order";
+
+// 選択中の並べ替え順を取得する（未設定時は消費(賞味)期限順）
+function getSortOrder() {
+  return localStorage.getItem(SORT_ORDER_KEY) || "expiry";
+}
+
+function setSortOrder(value) {
+  localStorage.setItem(SORT_ORDER_KEY, value);
+}
+
+// 並べ替え順に応じて食材配列をソートする（元の配列は変更しない）
+function sortFoodsByOrder(foods, sortOrder) {
+  const sorted = [...foods];
+  if (sortOrder === "purchase") {
+    // 購入日が古い順（見落とし・放置防止のため、古いものから気づけるように）
+    sorted.sort((a, b) => new Date(a.purchaseDate) - new Date(b.purchaseDate));
+  } else {
+    // 既定：消費(賞味)期限が近い順
+    sorted.sort((a, b) => new Date(a.expiryDate) - new Date(b.expiryDate));
+  }
+  return sorted;
+}
+
+// 並べ替えのselect要素に、保存済みの選択状態を反映し、変更時の処理を登録する
+function setupSortSelect(onChange) {
+  const selectEl = document.getElementById("sort-select");
+  if (!selectEl) return;
+  selectEl.value = getSortOrder();
+  selectEl.addEventListener("change", () => {
+    setSortOrder(selectEl.value);
+    onChange();
+  });
+}
+
 // 消費チェック用のUI部品（チェックボックス＋取り消しボタン）を生成する
 // タップ後すぐには反映せず、CONSUME_UNDO_DELAY_MSの間だけ「取消」を出して猶予を持たせる
 // onCommit: 猶予時間が過ぎて実際に確定した後に呼ばれる（一覧の再描画など）
