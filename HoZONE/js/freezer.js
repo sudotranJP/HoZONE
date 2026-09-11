@@ -39,6 +39,13 @@ function renderTodayDate(today) {
   }
 }
 
+function updateTotalCount(count) {
+  const el = document.getElementById("total-count");
+  if (el) {
+    el.textContent = `全${count}件`;
+  }
+}
+
 function renderFreezerList() {
   const today = getToday();
   renderTodayDate(today);
@@ -52,6 +59,8 @@ function renderFreezerList() {
 
   // 消費(賞味)期限が近い順にソート
   targetFoods.sort((a, b) => new Date(a.expiryDate) - new Date(b.expiryDate));
+
+  updateTotalCount(targetFoods.length);
 
   if (targetFoods.length === 0) {
     listEl.innerHTML = `<li class="empty-message">冷凍庫の食材は登録されていません。</li>`;
