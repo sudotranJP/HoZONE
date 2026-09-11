@@ -31,22 +31,14 @@ function daysBetween(baseDate, targetDateStr) {
   return Math.round(diffMs / (1000 * 60 * 60 * 24));
 }
 
-// 初回アクセス時の仮データ（保存データが無い場合のみ使用）
-// id は編集機能のために各食材を一意に識別するためのもの
-const seedFoods = [
-  { id: "1", name: "牛乳",     location: "冷蔵", purchaseDate: "2026-07-10", expiryDate: "2026-07-17" },
-  { id: "2", name: "食パン",   location: "常温", purchaseDate: "2026-07-12", expiryDate: "2026-07-16" },
-  { id: "3", name: "卵",       location: "冷蔵", purchaseDate: "2026-07-05", expiryDate: "2026-07-25" },
-  { id: "4", name: "冷凍餃子", location: "冷凍", purchaseDate: "2026-07-01", expiryDate: "2026-12-01" },
-  { id: "5", name: "バナナ",   location: "常温", purchaseDate: "2026-07-13", expiryDate: "2026-07-15" },
-];
-
 // 保存されている食材データを取得する
+// ※開発中は初回アクセス時に仮データ(seedFoods)を自動投入していたが、
+//   実際の公開・利用段階に入ったため、初回は空の状態から始まるようにした
 function loadFoods() {
   const raw = localStorage.getItem(STORAGE_KEY);
   if (raw === null) {
-    saveFoods(seedFoods);
-    return seedFoods;
+    saveFoods([]);
+    return [];
   }
   try {
     const foods = JSON.parse(raw);
@@ -291,3 +283,13 @@ function renderFooterBadges() {
 }
 
 renderFooterBadges();
+
+// ===== PWA対応：Service Workerの登録 =====
+// オフラインでもアプリ本体（画面）を開けるようにする
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("service-worker.js").catch((err) => {
+      console.error("HoZONE: Service Workerの登録に失敗", err);
+    });
+  });
+}

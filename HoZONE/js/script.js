@@ -51,3 +51,4 @@ foodForm.addEventListener("submit", (event) => {
 
 renderFoodList();
 console.log("HoZONE: S-01 一覧表示（期限順ソート）動作確認OK");
+console.log("コンソール画面です。localStorageコマンドを操作すると、思わぬデータ消失等の危険があります。操作する際には必ずバックアップをお取りください。");
