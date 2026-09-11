@@ -67,6 +67,15 @@ if (editingFood) {
 foodForm.addEventListener("submit", (event) => {
   event.preventDefault();
 
+  const expiryDateValue = document.getElementById("expiry-date").value;
+  const purchaseDateValue = document.getElementById("purchase-date").value;
+
+  // 購入日が消費(賞味)期限より後になっている場合は入力ミスの可能性が高いので確認する
+  if (purchaseDateValue && expiryDateValue && purchaseDateValue > expiryDateValue) {
+    window.alert("購入日が消費(賞味)期限より後になっています。日付を確認してください。");
+    return;
+  }
+
   const foods = loadFoods();
   const isFrozenLocation = (selectedLocation === "冷凍");
   const isFrozenFood = isFrozenLocation && isFrozenFoodCheckbox.checked;

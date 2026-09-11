@@ -197,6 +197,7 @@ footer {
 }
 
 footer a {
+  position: relative;
   flex: 1;
   text-align: center;
   padding: 10px 4px;
@@ -205,6 +206,24 @@ footer a {
   text-decoration: none;
   color: #333;
   font-size: 0.85rem;
+}
+
+.nav-badge {
+  position: absolute;
+  top: -6px;
+  right: 10px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  border-radius: 9px;
+  background: #d33;
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 0 2px #fff;
 }
 
 footer a.active {

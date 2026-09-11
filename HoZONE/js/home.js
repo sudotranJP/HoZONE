@@ -7,6 +7,13 @@ function renderTodayDate(today) {
   }
 }
 
+function updateTotalCount(count) {
+  const el = document.getElementById("total-count");
+  if (el) {
+    el.textContent = `全${count}件`;
+  }
+}
+
 function renderFoodList() {
   const today = getToday();
   renderTodayDate(today);
@@ -21,8 +28,11 @@ function renderFoodList() {
   // 消費(賞味)期限が近い順にソート
   targetFoods.sort((a, b) => new Date(a.expiryDate) - new Date(b.expiryDate));
 
+  updateTotalCount(targetFoods.length);
+
   if (targetFoods.length === 0) {
     listEl.innerHTML = `<li class="empty-message">登録されている食材はありません。「＋追加」から登録できます。</li>`;
+    renderFooterBadges();
     return;
   }
 
@@ -59,6 +69,8 @@ function renderFoodList() {
     li.appendChild(card);
     listEl.appendChild(li);
   });
+
+  renderFooterBadges();
 }
 
 renderFoodList();

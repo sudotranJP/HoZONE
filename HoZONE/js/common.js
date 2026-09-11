@@ -201,3 +201,57 @@ function maybeShowExpiryNotification() {
 
 // 全画面共通：読み込み時に通知チェックを行う
 maybeShowExpiryNotification();
+
+// ===== フッターナビの件数バッジ =====
+// 常温・冷蔵（S-01対象）と冷凍庫（S-02対象）それぞれについて、
+// 「要注意」な食材の件数を数える
+// ・常温・冷蔵：残り3日以内 or 期限切れ
+// ・冷凍庫：残り3日以内/期限切れ（冷凍食品そのもの） or 冷凍焼けリスク（15日以上）
+function countUrgentFoods() {
+  const today = getToday();
+  const foods = loadFoods().filter(f => !f.consumed);
+
+  let homeCount = 0;
+  let freezerCount = 0;
+
+  foods.forEach(food => {
+    if (food.location === "冷凍") {
+      if (food.isFrozenFood) {
+        const daysLeft = daysBetween(today, food.expiryDate);
+        if (daysLeft <= 3) freezerCount++;
+      } else {
+        const baseDateStr = food.frozenDate || food.purchaseDate;
+        const elapsed = daysBetween(new Date(baseDateStr), toISODate(today));
+        if (elapsed >= 15) freezerCount++;
+      }
+    } else {
+      const daysLeft = daysBetween(today, food.expiryDate);
+      if (daysLeft <= 3) homeCount++;
+    }
+  });
+
+  return { home: homeCount, freezer: freezerCount };
+}
+
+// フッターのリンクに件数バッジを付ける（0件の時はバッジを消す）
+function setNavBadge(linkEl, count) {
+  let badge = linkEl.querySelector(".nav-badge");
+  if (count > 0) {
+    if (!badge) {
+      badge = document.createElement("span");
+      badge.className = "nav-badge";
+      linkEl.appendChild(badge);
+    }
+    badge.textContent = count;
+  } else if (badge) {
+    badge.remove();
+  }
+}
+
+function renderFooterBadges() {
+  const counts = countUrgentFoods();
+  document.querySelectorAll('footer a[href="index.html"]').forEach(el => setNavBadge(el, counts.home));
+  document.querySelectorAll('footer a[href="freezer.html"]').forEach(el => setNavBadge(el, counts.freezer));
+}
+
+renderFooterBadges();

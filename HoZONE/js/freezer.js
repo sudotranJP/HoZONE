@@ -55,6 +55,7 @@ function renderFreezerList() {
 
   if (targetFoods.length === 0) {
     listEl.innerHTML = `<li class="empty-message">冷凍庫の食材は登録されていません。</li>`;
+    renderFooterBadges();
     return;
   }
 
@@ -91,6 +92,8 @@ function renderFreezerList() {
     li.appendChild(card);
     listEl.appendChild(li);
   });
+
+  renderFooterBadges();
 }
 
 renderFreezerList();
